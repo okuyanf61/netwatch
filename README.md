@@ -112,6 +112,19 @@ Everything has sensible defaults. Override with environment variables if you wan
 | `1`, `1.2`, `1.2.3` | Released versions (git tags `v1.2.3`) |
 | `sha-abc1234` | A specific commit |
 
+## Releases
+
+Releases are fully automatic. Every push to `main` is checked against [Conventional Commits](https://www.conventionalcommits.org/) since the last tag:
+
+| Commit | Release |
+|---|---|
+| `fix: ...`, `perf: ...` | patch (`1.2.3` → `1.2.4`) |
+| `feat: ...` | minor (`1.2.3` → `1.3.0`) |
+| `feat!: ...` or a `BREAKING CHANGE:` footer | major (`1.2.3` → `2.0.0`) |
+| `docs:`, `ci:`, `build:`, `chore:`, `refactor:`, `test:` | no release (image still rebuilt as `latest`) |
+
+When a release is due, CI tags the commit, publishes a GitHub release with grouped notes, and pushes the `X.Y.Z`, `X.Y`, `X` and `latest` images. See [`scripts/next_release.py`](scripts/next_release.py).
+
 ## Notes
 
 - **Raspberry Pi clock.** Pis before the Pi 5 have no real-time clock. If the Pi reboots *while* the internet is down, its clock may be off until NTP syncs, so timestamps recorded in that window can be shifted. A Pi 5 with an RTC battery doesn't have this problem.
